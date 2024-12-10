@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">PersonalFinance</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Personal Finance</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <!-- Account -->
+    <string name="menu_accounts">Account</string>
+    <string name="description_account">Account description</string>
+    <string name="form_account_name">Account name</string>
+    <string name="form_account_initial_balance">Initial balance</string>
+    <string name="form_account_current_balance">Current balance</string>
+    <string name="form_account_add_button">Add Account</string>
+    <string name="form_account_save_msg">Account successfully created</string>
+    <string name="form_account_save_error">Account creation failed</string>
+    <string name="account_delete">Account successfully deleted</string>
+    <string name="account_delete_error">Failed to delete the account, check that there are no transactions or transfers using this account. </string>
+
+
+
+    <string name="menu_categories">Categories</string>
+    <string name="description_categories">Categories description</string>
+
+    <string name="menu_incomes">Incomes</string>
+    <string name="menu_expenses">Expenses</string>
+    <string name="menu_transfers">Transfers</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_transactions">Transactions</string>
+</resources>
