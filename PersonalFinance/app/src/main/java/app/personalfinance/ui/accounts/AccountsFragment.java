@@ -27,8 +27,6 @@ import java.util.concurrent.Executors;
 import app.personalfinance.R;
 import app.personalfinance.data.accounts.AccountModel;
 import app.personalfinance.databinding.FragmentAccountsBinding;
-import app.personalfinance.ui.accounts.AccountAdapter;
-import app.personalfinance.ui.accounts.SwipeToDeleteCallback;
 import app.personalfinance.viewModel.accounts.AccountsViewModel;
 
 public class AccountsFragment extends Fragment {
@@ -59,7 +57,7 @@ public class AccountsFragment extends Fragment {
         AccountAdapter adapter = new AccountAdapter(getContext(), new ArrayList<>(), accountsViewModel);
         recyclerView.setAdapter(adapter);
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(adapter));
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteAccountCallback(adapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         bindRecyclerView(adapter);

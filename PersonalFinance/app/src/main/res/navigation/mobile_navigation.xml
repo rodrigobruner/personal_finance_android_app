@@ -67,6 +67,9 @@
         <action
             android:id="@+id/action_categories_to_transactions"
             app:destination="@id/nav_transactions" />
+        <action
+            android:id="@+id/action_categoriesFragment_to_formCategoriesFragment"
+            app:destination="@id/nav_form_categories" />
     </fragment>
 
     <fragment
@@ -78,5 +81,12 @@
             android:id="@+id/action_formAccountsFragment_to_accountsFragment"
             app:destination="@id/nav_accounts" />
     </fragment>
-
+    <fragment
+        android:id="@+id/nav_form_categories"
+        android:name="app.personalfinance.ui.categories.FormCategoriesFragment"
+        android:label="Form Categories"
+        tools:layout="@layout/fragment_form_categories" />
+    <action
+        android:id="@+id/action_formCategoriesFragment_to_categoriesFragment"
+        app:destination="@id/nav_categories" />
 </navigation>

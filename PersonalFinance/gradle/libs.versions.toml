@@ -38,6 +38,7 @@ lifecycleextensions = { group = "androidx.lifecycle", name = "lifecycle-extensio
 lifecyclecompile = { group = "androidx.lifecycle", name = "lifecycle-compiler", version.ref = "lifecyclecompile" }
 room-common = { group = "androidx.room", name = "room-common", version.ref = "roomCommon" }
 
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 

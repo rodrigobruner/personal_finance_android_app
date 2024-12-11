@@ -2,12 +2,14 @@ package app.personalfinance.repo.categories;
 
 import android.app.Application;
 
+import androidx.lifecycle.LiveData;
+
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import app.personalfinance.data.PersonalFinanceDatabase;
 import app.personalfinance.data.categories.CategoryDao;
-import app.personalfinance.data.categories.CategoryDatabase;
 import app.personalfinance.data.categories.CategoryModel;
 
 public class CategoryRepository {
@@ -20,7 +22,7 @@ public class CategoryRepository {
 
     // Constructor
     public CategoryRepository(Application application) {
-        CategoryDatabase database = CategoryDatabase.getInstance(application);
+        PersonalFinanceDatabase database = PersonalFinanceDatabase.getInstance(application);
         // Set dao
         categoryDao = database.categoryDao();
 
@@ -28,14 +30,25 @@ public class CategoryRepository {
         dbExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
     }
 
-    // Function to insert category
+    // Function to insert a category
     public void insert(CategoryModel model) {
         // Run in background the insert command
         dbExecutor.execute(() -> categoryDao.insert(model));
     }
 
+    // Function to delete a category
+    public void delete(CategoryModel model) {
+        dbExecutor.execute(() ->
+                categoryDao.delete(model));
+    }
+
     // Function to get all categories
-    public List<CategoryModel> getAllCategories() {
+    public LiveData<List<CategoryModel>> getAllCategories() {
         return categoryDao.getAllCategories();
+    }
+
+    // Function to get all categories by type
+    public LiveData<List<CategoryModel>> getCategoriesByType(String type) {
+        return categoryDao.getCategoriesByType(type);
     }
 }

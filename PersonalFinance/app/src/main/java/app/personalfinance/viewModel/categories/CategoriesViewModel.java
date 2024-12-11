@@ -1,19 +1,38 @@
 package app.personalfinance.viewModel.categories;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-public class CategoriesViewModel extends ViewModel {
+import java.util.List;
 
-    private final MutableLiveData<String> mText;
+import app.personalfinance.data.categories.CategoryModel;
+import app.personalfinance.repo.categories.CategoryRepository;
 
-    public CategoriesViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("CategoriesViewModel");
+public class CategoriesViewModel extends AndroidViewModel {
+
+    private CategoryRepository repository;
+
+    public CategoriesViewModel(@NonNull Application application) {
+        super(application);
+        repository = new CategoryRepository(application);
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public void saveCategory(String name, String type) {
+        repository.insert(new CategoryModel(name, type));
+    }
+
+    public void deleteCategory(CategoryModel category) {
+        repository.delete(category);
+    }
+
+    public LiveData<List<CategoryModel>> getAllCategories() {
+        return repository.getAllCategories();
+    }
+
+    public LiveData<List<CategoryModel>> getCategoriesByType(String type) {
+        return repository.getCategoriesByType(type);
     }
 }

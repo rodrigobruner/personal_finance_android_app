@@ -4,13 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import app.personalfinance.ui.accounts.AccountAdapter;
-
-public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
+public class SwipeToDeleteAccountCallback extends ItemTouchHelper.SimpleCallback {
 
     private AccountAdapter mAdapter;
 
-    public SwipeToDeleteCallback(AccountAdapter adapter) {
+    public SwipeToDeleteAccountCallback(AccountAdapter adapter) {
         super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         mAdapter = adapter;
     }

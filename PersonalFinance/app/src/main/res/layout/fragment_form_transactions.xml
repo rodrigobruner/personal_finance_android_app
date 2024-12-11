@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textViewTranscationFrom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="@string/form_transaction_account" />
+
+    <Spinner
+        android:id="@+id/spinnerTranscationFrom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="From"
+        android:textSize="18sp"
+        android:minHeight="48dp"/>
+
+    <TextView
+        android:id="@+id/textViewTranscationTo"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="@string/form_transaction_category" />
+
+    <Spinner
+        android:id="@+id/spinnerTranscationTo"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="To"
+        android:textSize="18sp"
+        android:minHeight="48dp"/>
+
+    <EditText
+        android:id="@+id/editTextTranscationAmount"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/form_transaction_amount"
+        android:inputType="numberDecimal"/>
+
+    <EditText
+        android:id="@+id/editTextTranscationDescription"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/form_transaction_description"/>
+
+    <EditText
+        android:id="@+id/editTextTranscationDate"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/form_transaction_date"
+        android:inputType="date"/>
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/form_transaction_save_button"/>
+</LinearLayout>
