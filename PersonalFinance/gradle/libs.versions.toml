@@ -37,7 +37,7 @@ roomcompiler = { group = "androidx.room", name = "room-compiler", version.ref = 
 lifecycleextensions = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "lifecycleextensions" }
 lifecyclecompile = { group = "androidx.lifecycle", name = "lifecycle-compiler", version.ref = "lifecyclecompile" }
 room-common = { group = "androidx.room", name = "room-common", version.ref = "roomCommon" }
-
+cardview = { group = "androidx.cardview", name = "cardview", version = "1.0.0" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

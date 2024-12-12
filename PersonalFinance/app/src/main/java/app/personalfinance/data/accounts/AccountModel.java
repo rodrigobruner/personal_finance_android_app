@@ -3,20 +3,23 @@ package app.personalfinance.data.accounts;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "accounts")
+@Entity(tableName = "accounts") // Table name
 public class AccountModel {
+    // Primary key
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String name;
     private double balance;
     private double currentBalance;
 
+    // Constructor
     public AccountModel(String name, double balance, double currentBalance) {
         this.name = name;
         this.balance = balance;
         this.currentBalance = currentBalance;
     }
 
+    // Getters and Setters
     public int getId() {
         return id;
     }

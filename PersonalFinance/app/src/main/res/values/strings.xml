@@ -51,10 +51,24 @@
     <string name="form_transaction_save_msg">Transaction successfully created</string>
     <string name="form_transaction_save_error">Transaction creation failed</string>
 
-
+    <!-- Incomes -->
     <string name="menu_incomes">Incomes</string>
+    <string name="form_income_add_button">Add New Income</string>
+    <string name="income_delete">Income successfully deleted</string>
+    <string name="income_delete_error">Failed to delete the income, check that there are no transactions using this income. </string>
+
+    <!-- Expenses -->
     <string name="menu_expenses">Expenses</string>
+    <string name="form_expense_add_button">Add New Expense</string>
+    <string name="expense_delete">Expense successfully deleted</string>
+    <string name="expense_delete_error">Failed to delete the expense, check that there are no transactions using this expense. </string>
+
+    <!-- Transfers -->
     <string name="menu_transfers">Transfers</string>
+    <string name="form_transfer_add_button">Add New Transfer</string>
+    <string name="transfer_delete">Transfer successfully deleted</string>
+    <string name="transfer_delete_error">Failed to delete the transfer, check that there are no transactions using this transfer. </string>
+
     <string name="menu_settings">Settings</string>
 
 </resources>

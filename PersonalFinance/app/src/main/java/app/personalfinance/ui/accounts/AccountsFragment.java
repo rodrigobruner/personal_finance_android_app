@@ -29,10 +29,16 @@ import app.personalfinance.data.accounts.AccountModel;
 import app.personalfinance.databinding.FragmentAccountsBinding;
 import app.personalfinance.viewModel.accounts.AccountsViewModel;
 
+// Fragment for the accounts list
 public class AccountsFragment extends Fragment {
-
+    // Binding
     private FragmentAccountsBinding binding;
+    // ViewModel
     private AccountsViewModel accountsViewModel;
+    // RecyclerView
+    private RecyclerView recyclerView;
+
+    // Executor service to run the queries in background
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Handler mainHandler = new Handler(Looper.getMainLooper());
 
@@ -40,44 +46,54 @@ public class AccountsFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         accountsViewModel = new ViewModelProvider(this).get(AccountsViewModel.class);
 
+        // Inflate the layout for this fragment
         binding = FragmentAccountsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // get the button to add an account
         Button addButton = binding.buttonAddAccount;
+        //Onclick
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NavController navController = Navigation.findNavController(v);
                 navController.navigate(R.id.action_accountsFragment_to_formAccountsFragment);
+                //Move to the formAccountsFragment
             }
         });
 
-        RecyclerView recyclerView = binding.recyclerViewAccounts;
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        AccountAdapter adapter = new AccountAdapter(getContext(), new ArrayList<>(), accountsViewModel);
-        recyclerView.setAdapter(adapter);
+        // RecyclerView
+        recyclerView = binding.recyclerViewAccounts;
+        // Set the layout manager
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteAccountCallback(adapter));
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        // Bind the RecyclerView
+        bindRecyclerView();
 
-        bindRecyclerView(adapter);
+
 
         return root;
     }
 
-    void bindRecyclerView(AccountAdapter adapter) {
-        executor.submit(() -> {
-            LiveData<List<AccountModel>> liveData = accountsViewModel.getAllAccounts();
-            mainHandler.post(() -> {
-                liveData.observe(getViewLifecycleOwner(), accountList -> {
-                    Log.d("AccountsFragment", "Account list: " + accountList);
-                    if (accountList != null) {
-                        adapter.accounts.clear();
-                        adapter.accounts.addAll(accountList);
-                        adapter.notifyDataSetChanged();
-                    }
-                });
-            });
+    void bindRecyclerView() {
+        // Get the accounts list
+        LiveData<List<AccountModel>> liveData = accountsViewModel.getAllAccounts();
+
+        // Observe the LiveData
+        liveData.observe(getViewLifecycleOwner(), accountList -> {
+            if (accountList != null) {
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                // Set the adapter
+                AccountAdapter adapter = new AccountAdapter(getContext(), (ArrayList<AccountModel>) accountList, accountsViewModel);
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                Log.d("AccountsFragment", "Adapter updated with accounts size: " + adapter.accounts.size());
+
+                // Swipe to delete
+                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteAccountCallback(adapter));
+                itemTouchHelper.attachToRecyclerView(recyclerView);
+            } else {
+                Log.d("AccountsFragment", "Account list is null");
+            }
         });
     }
 

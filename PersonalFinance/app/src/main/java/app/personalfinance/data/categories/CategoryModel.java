@@ -3,7 +3,7 @@ package app.personalfinance.data.categories;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "categories")
+@Entity(tableName = "categories") //Table name
 public class CategoryModel {
     //PK id
     @PrimaryKey(autoGenerate = true)

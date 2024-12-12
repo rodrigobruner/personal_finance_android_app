@@ -4,6 +4,7 @@ import android.content.Context;
 import java.util.ArrayList;
 import app.personalfinance.R;
 
+// SettingsOptionList class, contains the settings options
 public class SettingsOptionList {
 
     // Get settings options to generate the settings listView

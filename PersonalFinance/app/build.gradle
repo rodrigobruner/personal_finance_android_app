@@ -38,6 +38,7 @@ dependencies {
     annotationProcessor(libs.roomcompiler)
     implementation(libs.lifecycleextensions)
     annotationProcessor(libs.lifecyclecompile)
+    implementation(libs.cardview)
 
     implementation libs.appcompat
     implementation libs.material

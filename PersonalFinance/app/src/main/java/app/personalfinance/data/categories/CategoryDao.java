@@ -10,6 +10,7 @@ import java.util.List;
 
 import app.personalfinance.data.accounts.AccountModel;
 
+// Data Access Object for CategoryModel
 @Dao
 public interface CategoryDao {
     @Insert

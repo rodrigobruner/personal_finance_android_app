@@ -1,20 +1,44 @@
 package app.personalfinance.viewModel.transactions;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
+import java.util.Date;
+import java.util.List;
 
-public class TransactionsViewModel extends ViewModel {
+import app.personalfinance.data.transactions.TransactionModel;
+import app.personalfinance.data.transactions.TransactionWithDetails;
+import app.personalfinance.repo.transactions.TransactionRepository;
 
-    private final MutableLiveData<String> mText;
+public class TransactionsViewModel extends AndroidViewModel {
 
-    public TransactionsViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("TransactionsViewModel");
+    private TransactionRepository repository;
+
+    public TransactionsViewModel(@NonNull Application application) {
+        super(application);
+        repository = new TransactionRepository(application);
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public void insertTransaction(int account, int category, double amount, String description, String date, String type) {
+        repository.insert(new TransactionModel(account, category, amount, description, date, type));
+    }
+
+    public void deleteTransaction(TransactionModel transaction) {
+        repository.delete(transaction);
+    }
+
+    public LiveData<List<TransactionWithDetails>> getAllTransactions() {
+        return repository.getAllTransactions();
+    }
+
+    public LiveData<List<TransactionWithDetails>> getAllIncomes() {
+        return repository.getAllIncomes();
+    }
+
+    public LiveData<List<TransactionWithDetails>> getAllExpenses() {
+        return repository.getAllExpenses();
     }
 }

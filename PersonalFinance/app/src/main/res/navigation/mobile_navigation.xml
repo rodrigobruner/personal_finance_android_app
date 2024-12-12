@@ -16,18 +16,26 @@
         android:name="app.personalfinance.ui.incomes.IncomesFragment"
         android:label="@string/menu_incomes"
         tools:layout="@layout/fragment_incomes" />
+        <action
+            android:id="@+id/action_incomesFragment_to_transactionsFragment"
+            app:destination="@id/nav_transactions" />
 
     <fragment
         android:id="@+id/nav_expenses"
         android:name="app.personalfinance.ui.expenses.ExpensesFragment"
         android:label="@string/menu_expenses"
         tools:layout="@layout/fragment_expenses" />
-
+        <action
+            android:id="@+id/action_expensesFragment_to_transactionsFragment"
+            app:destination="@id/nav_transactions" />
     <fragment
         android:id="@+id/nav_transfers"
         android:name="app.personalfinance.ui.transfers.TransfersFragment"
         android:label="@string/menu_transfers"
         tools:layout="@layout/fragment_transfers" />
+        <action
+            android:id="@+id/action_transfersFragment_to_transactionsFragment"
+            app:destination="@id/nav_transactions" />
 
     <fragment
         android:id="@+id/nav_settings"

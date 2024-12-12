@@ -1,6 +1,7 @@
 package app.personalfinance.viewModel.accounts;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -29,6 +30,8 @@ public class AccountsViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<AccountModel>> getAllAccounts() {
-        return repository.getAllAccounts();
+        LiveData<List<AccountModel>> data = repository.getAllAccounts();
+//        Log.d("AccountsViewModel", "getAllAccounts: " + data.get());
+        return data;
     }
 }

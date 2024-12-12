@@ -8,6 +8,7 @@ import androidx.room.Query;
 
 import java.util.List;
 
+// Data Access Object for AccountModel
 @Dao
 public interface AccountDao {
     @Insert
