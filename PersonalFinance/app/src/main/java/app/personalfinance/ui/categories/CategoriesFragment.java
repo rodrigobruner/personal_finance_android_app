@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,6 +38,8 @@ public class CategoriesFragment extends Fragment {
     // ViewModel
     private CategoriesViewModel categoriesViewModel;
 
+    ImageView noDataImage;
+
     // Executor and Handler
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -51,6 +54,8 @@ public class CategoriesFragment extends Fragment {
         binding = FragmentCategoriesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        noDataImage = binding.imageViewCategoriesNoData;
+
         Button addButton = binding.buttonAddCategory;
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,26 +66,31 @@ public class CategoriesFragment extends Fragment {
         });
 
         recyclerView = binding.recyclerViewCategories;
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new CategoryAdapter(getContext(), new ArrayList<>(), categoriesViewModel);
-        recyclerView.setAdapter(adapter);
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCategoryCallback(adapter));
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-
         bindRecyclerView();
 
         return root;
     }
 
     private void bindRecyclerView() {
-        LiveData<List<CategoryModel>> liveData = categoriesViewModel.getAllCategories();
-        liveData.observe(getViewLifecycleOwner(), categoryList -> {
-            Log.d("CategoriesFragment", "Category list size: " + categoryList.size());
-            Toast.makeText(getContext(), "QT"+ categoryList.size(), Toast.LENGTH_LONG).show();
-            if (categoryList != null) {
-                adapter.updateCategories(categoryList);
-            }
+        executor.execute(() -> {
+            // Get the categories list
+            LiveData<List<CategoryModel>> liveData = categoriesViewModel.getAllCategories();
+
+            // Observe the LiveData
+            mainHandler.post(() -> liveData.observe(getViewLifecycleOwner(), categoryList -> {
+                if (categoryList == null || categoryList.isEmpty()) {
+                    noDataImage.setVisibility(View.VISIBLE);
+                } else {
+                    noDataImage.setVisibility(View.GONE);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    adapter = new CategoryAdapter(getContext(), (ArrayList<CategoryModel>) categoryList, categoriesViewModel);
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+
+                    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCategoryCallback(adapter));
+                    itemTouchHelper.attachToRecyclerView(recyclerView);
+                }
+            }));
         });
     }
 

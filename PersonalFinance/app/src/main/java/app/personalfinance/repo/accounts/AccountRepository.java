@@ -37,6 +37,12 @@ public class AccountRepository {
                 accountDao.insert(model));
     }
 
+    // Function to update an account
+    public void updateAccountBalance(int accountID, double amount) {
+        dbExecutor.execute(() ->
+            accountDao.updateAccountBalance(accountID, amount));
+    }
+
     // Function to delete an account
     public void delete(AccountModel account) {
         dbExecutor.execute(() ->

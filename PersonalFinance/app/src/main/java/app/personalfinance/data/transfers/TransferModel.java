@@ -14,11 +14,11 @@ import app.personalfinance.data.categories.CategoryModel;
                 @ForeignKey(entity = AccountModel.class,
                         parentColumns = "id",
                         childColumns = "fromAccount",
-                        onDelete = ForeignKey.CASCADE),
+                        onDelete = ForeignKey.RESTRICT),
                 @ForeignKey(entity = AccountModel.class,
                         parentColumns = "id",
                         childColumns = "toAccount",
-                        onDelete = ForeignKey.CASCADE),
+                        onDelete = ForeignKey.RESTRICT),
         }) //Table name
 public class TransferModel {
     //PK id

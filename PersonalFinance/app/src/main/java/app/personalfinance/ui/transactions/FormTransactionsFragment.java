@@ -2,7 +2,6 @@ package app.personalfinance.ui.transactions;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +12,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
 import app.personalfinance.R;
 import app.personalfinance.data.accounts.AccountModel;
 import app.personalfinance.data.categories.CategoriesTypes;
@@ -98,8 +94,6 @@ public class FormTransactionsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 try {
-                    Log.d("FormTransactionsFragment", "Save Button Clicked");
-
                     ViewPager2 viewPager = getActivity().findViewById(R.id.viewPager);
                     int currentTabPosition = viewPager.getCurrentItem();
 
@@ -108,50 +102,57 @@ public class FormTransactionsFragment extends Fragment {
 
                     if (currentTabPosition == 0) {
                         type = CategoriesTypes.INCOME;
-                        Log.d("FormTransactionsFragment", "Get income spinner");
                         category = categories.get(spinnerFrom.getSelectedItemPosition()).getId();
                         account = accounts.get(spinnerTo.getSelectedItemPosition()).getId();
                     }
 
                     if (currentTabPosition == 1) {
-                        Log.d("FormTransactionsFragment", "Get expense spinner");
-                        Log.d("FormTransactionsFragment", spinnerTo.getSelectedItemPosition() + "");
-                        Log.d("FormTransactionsFragment", categories.size()+"");
-                        Log.d("FormTransactionsFragment", categories.get(spinnerTo.getSelectedItemPosition()).getName());
                         category = categories.get(spinnerTo.getSelectedItemPosition()).getId();
                         account = accounts.get(spinnerFrom.getSelectedItemPosition()).getId();
                         type = CategoriesTypes.EXPENSE;
                     }
 
-                    Log.d("FormTransactionsFragment", "Get data");
                     Double amount = CurrencyFormatter.convert(editTextAmount.getText().toString());
                     String description = editTextDescription.getText().toString();
                     String date = editTextDate.getText().toString();
 
                     if (amount <= 0 || date.isEmpty()) {
-                        Log.d("FormTransactionsFragment", "Validate data");
-                        Toast.makeText(getContext(), "Please fill all required fields", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getString(R.string.form_transaction_required_field), Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     if (currentTabPosition == 0 || currentTabPosition == 1) {
-                        Log.d("FormTransactionsFragment", "Insert transaction");
                         TransactionsViewModel transactionsViewModel = new ViewModelProvider(FormTransactionsFragment.this).get(TransactionsViewModel.class);
                         transactionsViewModel.insertTransaction(account, category, amount, description, date, type);
-                        Toast.makeText(getContext(), "Insert", Toast.LENGTH_SHORT).show();
+
+                        Double amountUpdate = currentTabPosition == 0 ? amount : -amount;
+
+                        AccountsViewModel accountsViewModel = new ViewModelProvider(FormTransactionsFragment.this).get(AccountsViewModel.class);
+                        accountsViewModel.updateAccountBalance(account, amountUpdate);
+
+
+                        String msg = currentTabPosition == 0 ? getString(R.string.income_insert) :
+                                                                getString(R.string.expense_insert);
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                     }
 
                     if (currentTabPosition == 2) {
-                        Log.d("FormTransactionsFragment", "Insert Transfer");
                         int accountFrom = accounts.get(spinnerFrom.getSelectedItemPosition()).getId();
                         int toAccount = accounts.get(spinnerTo.getSelectedItemPosition()).getId();
+
+                        if (accountFrom == toAccount) {
+                            Toast.makeText(getContext(), getString(R.string.form_transfer_from_same_account), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         TransfersViewModel transfersViewModel = new ViewModelProvider(FormTransactionsFragment.this).get(TransfersViewModel.class);
                         transfersViewModel.insertTransfer(accountFrom, toAccount, amount, description, date);
-                        Toast.makeText(getContext(), "Insert", Toast.LENGTH_SHORT).show();
+
+                        Toast.makeText(getContext(), getString(R.string.transfer_insert), Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {
-                    Toast.makeText(getContext(), "Error when try save transaction", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.transactions_insert_error), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
@@ -165,8 +166,6 @@ public class FormTransactionsFragment extends Fragment {
     void setupSpinners() {
         ViewPager2 viewPager = getActivity().findViewById(R.id.viewPager);
         int currentTabPosition = viewPager.getCurrentItem();
-
-        Log.d("FormTransactionsFragment", "Current Tab Position: " + currentTabPosition);
 
         if (currentTabPosition == 0) {
             textViewFrom.setText(getString(R.string.form_transaction_category));
@@ -197,7 +196,6 @@ public class FormTransactionsFragment extends Fragment {
                 this.categories = categories;
                 List<String> categoryNames = new ArrayList<>();
                 for (CategoryModel category : categories) {
-                    Log.i("Category", "Category: " + category.getName());
                     categoryNames.add(category.getName());
                 }
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, categoryNames);
@@ -214,7 +212,6 @@ public class FormTransactionsFragment extends Fragment {
                 this.accounts = accounts;
                 List<String> accountNames = new ArrayList<>();
                 for (AccountModel account : accounts) {
-                    Log.i("Account", "Account: " + account.getName());
                     accountNames.add(account.getName());
                 }
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, accountNames);

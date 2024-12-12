@@ -15,11 +15,11 @@ import app.personalfinance.data.categories.CategoryModel;
                 @ForeignKey(entity = AccountModel.class,
                         parentColumns = "id",
                         childColumns = "accountId",
-                        onDelete = ForeignKey.CASCADE),
+                        onDelete = ForeignKey.RESTRICT),
                 @ForeignKey(entity = CategoryModel.class,
                         parentColumns = "id",
                         childColumns = "categoryId",
-                        onDelete = ForeignKey.CASCADE)
+                        onDelete = ForeignKey.RESTRICT)
         }) //Table name
 public class TransactionModel {
 

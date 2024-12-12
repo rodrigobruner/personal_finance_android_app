@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -41,6 +42,8 @@ public class ExpensesFragment extends Fragment {
     // RecyclerView
     private RecyclerView recyclerView;
 
+    ImageView noDataImage;
+
     // Executor service to run the queries in background
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -54,6 +57,8 @@ public class ExpensesFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentExpensesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        noDataImage = binding.imageViewExpensesNoData;
 
         // get the button to add an expense
         Button addButton = binding.buttonAddExpenses;
@@ -78,25 +83,29 @@ public class ExpensesFragment extends Fragment {
     }
 
     void bindRecyclerView() {
-        // Get the expenses list
-        LiveData<List<TransactionWithDetails>> liveData = transactionsViewModel.getAllExpenses();
+        executor.execute(() -> {
+            // Get the expenses list
+            LiveData<List<TransactionWithDetails>> liveData = transactionsViewModel.getAllExpenses();
 
-        // Observe the LiveData
-        liveData.observe(getViewLifecycleOwner(), expenseList -> {
-            if (expenseList != null) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                // Set the adapter
-                ExpenseAdapter adapter = new ExpenseAdapter(getContext(), (ArrayList<TransactionWithDetails>) expenseList, transactionsViewModel);
-                recyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-                Log.d("ExpensesFragment", "Adapter updated with expenses size: " + adapter.getItemCount());
+            // Observe the LiveData
+            mainHandler.post(() -> liveData.observe(getViewLifecycleOwner(), expenseList -> {
+                if (expenseList == null || expenseList.isEmpty()) {
+                    noDataImage.setVisibility(View.VISIBLE);
+                    Log.d("ExpensesFragment", "Expense list is null");
+                } else {
+                    noDataImage.setVisibility(View.GONE);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    // Set the adapter
+                    ExpenseAdapter adapter = new ExpenseAdapter(getContext(), (ArrayList<TransactionWithDetails>) expenseList, transactionsViewModel);
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    Log.d("ExpensesFragment", "Adapter updated with expenses size: " + adapter.getItemCount());
 
-                // Swipe to delete
-                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteExpenseCallback(adapter));
-                itemTouchHelper.attachToRecyclerView(recyclerView);
-            } else {
-                Log.d("ExpensesFragment", "Expense list is null");
-            }
+                    // Swipe to delete
+                    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteExpenseCallback(adapter));
+                    itemTouchHelper.attachToRecyclerView(recyclerView);
+                }
+            }));
         });
     }
 

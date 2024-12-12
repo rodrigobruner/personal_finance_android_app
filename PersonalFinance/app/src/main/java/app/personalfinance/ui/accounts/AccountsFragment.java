@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -38,6 +39,8 @@ public class AccountsFragment extends Fragment {
     // RecyclerView
     private RecyclerView recyclerView;
 
+    ImageView noDataImage;
+
     // Executor service to run the queries in background
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -50,8 +53,12 @@ public class AccountsFragment extends Fragment {
         binding = FragmentAccountsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+
+        noDataImage = binding.imageViewAccountsNoData;
+
         // get the button to add an account
         Button addButton = binding.buttonAddAccount;
+
         //Onclick
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,25 +82,26 @@ public class AccountsFragment extends Fragment {
     }
 
     void bindRecyclerView() {
-        // Get the accounts list
-        LiveData<List<AccountModel>> liveData = accountsViewModel.getAllAccounts();
+        executor.execute(() -> {
+            // Get the accounts list
+            LiveData<List<AccountModel>> liveData = accountsViewModel.getAllAccounts();
 
-        // Observe the LiveData
-        liveData.observe(getViewLifecycleOwner(), accountList -> {
-            if (accountList != null) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                // Set the adapter
-                AccountAdapter adapter = new AccountAdapter(getContext(), (ArrayList<AccountModel>) accountList, accountsViewModel);
-                recyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-                Log.d("AccountsFragment", "Adapter updated with accounts size: " + adapter.accounts.size());
-
-                // Swipe to delete
-                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteAccountCallback(adapter));
-                itemTouchHelper.attachToRecyclerView(recyclerView);
-            } else {
-                Log.d("AccountsFragment", "Account list is null");
-            }
+            // Observe the LiveData
+            mainHandler.post(() -> liveData.observe(getViewLifecycleOwner(), accountList -> {
+                if (accountList == null || accountList.isEmpty()) {
+                    noDataImage.setVisibility(View.VISIBLE);
+                } else {
+                    noDataImage.setVisibility(View.GONE);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    // Set the adapter
+                    AccountAdapter adapter = new AccountAdapter(getContext(), (ArrayList<AccountModel>) accountList, accountsViewModel);
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    // Swipe to delete
+                    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteAccountCallback(adapter));
+                    itemTouchHelper.attachToRecyclerView(recyclerView);
+                }
+            }));
         });
     }
 

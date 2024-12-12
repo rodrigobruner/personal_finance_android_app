@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -16,6 +17,9 @@ public interface AccountDao {
 
     @Delete
     void delete(AccountModel account);
+
+    @Query("UPDATE accounts SET currentBalance = currentBalance + :amount WHERE id = :accountID")
+    void updateAccountBalance(int accountID, double amount);
 
     @Query("SELECT * FROM accounts ORDER BY id DESC LIMIT 1")
     AccountModel getLast();

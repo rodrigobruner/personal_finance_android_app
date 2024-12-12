@@ -65,7 +65,6 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         AccountModel account = accounts.get(position);
-        Log.d("AccountAdapter", "Position: " + position + " Account: " + account.getName());
         // Set the account name
         holder.accountName.setText(account.getName());
         // Set the account current balance
@@ -75,7 +74,6 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
     @Override
     public int getItemCount() {
         // Return the number of accounts
-        Log.d("AccountAdapter", "Accounts size Get Item Count: " + accounts.size());
         return accounts.size();
     }
 

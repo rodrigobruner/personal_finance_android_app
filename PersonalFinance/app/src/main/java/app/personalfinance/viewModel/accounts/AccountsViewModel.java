@@ -25,6 +25,10 @@ public class AccountsViewModel extends AndroidViewModel {
         repository.insert(new AccountModel(name, balance, balance));
     }
 
+    public void updateAccountBalance(int accountID, double amount) {
+        repository.updateAccountBalance(accountID, amount);
+    }
+
     public void deleteAccount(AccountModel account) {
         repository.delete(account);
     }

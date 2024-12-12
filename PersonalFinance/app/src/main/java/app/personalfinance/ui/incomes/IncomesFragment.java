@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -41,6 +42,8 @@ public class IncomesFragment extends Fragment {
     // RecyclerView
     private RecyclerView recyclerView;
 
+    ImageView noDataImage;
+
     // Executor service to run the queries in background
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -57,6 +60,8 @@ public class IncomesFragment extends Fragment {
 
         // get the button to add an income
         Button addButton = binding.buttonAddIncomes;
+        noDataImage = binding.imageViewIncomesNoData;
+
         // Onclick
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,25 +83,29 @@ public class IncomesFragment extends Fragment {
     }
 
     void bindRecyclerView() {
-        // Get the incomes list
-        LiveData<List<TransactionWithDetails>> liveData = transactionsViewModel.getAllIncomes();
+        executor.execute(() -> {
+            // Get the incomes list
+            LiveData<List<TransactionWithDetails>> liveData = transactionsViewModel.getAllIncomes();
 
-        // Observe the LiveData
-        liveData.observe(getViewLifecycleOwner(), incomeList -> {
-            if (incomeList != null) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                // Set the adapter
-                IncomeAdapter adapter = new IncomeAdapter(getContext(), (ArrayList<TransactionWithDetails>) incomeList, transactionsViewModel);
-                recyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-                Log.d("IncomesFragment", "Adapter updated with incomes size: " + adapter.getItemCount());
+            // Observe the LiveData
+            mainHandler.post(() -> liveData.observe(getViewLifecycleOwner(), incomeList -> {
+                if (incomeList == null || incomeList.isEmpty()) {
+                    noDataImage.setVisibility(View.VISIBLE);
+                    Log.d("IncomesFragment", "Income list is null");
+                } else {
+                    noDataImage.setVisibility(View.GONE);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    // Set the adapter
+                    IncomeAdapter adapter = new IncomeAdapter(getContext(), (ArrayList<TransactionWithDetails>) incomeList, transactionsViewModel);
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    Log.d("IncomesFragment", "Adapter updated with incomes size: " + adapter.getItemCount());
 
-                // Swipe to delete
-                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteIncomeCallback(adapter));
-                itemTouchHelper.attachToRecyclerView(recyclerView);
-            } else {
-                Log.d("IncomesFragment", "Income list is null");
-            }
+                    // Swipe to delete
+                    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteIncomeCallback(adapter));
+                    itemTouchHelper.attachToRecyclerView(recyclerView);
+                }
+            }));
         });
     }
 

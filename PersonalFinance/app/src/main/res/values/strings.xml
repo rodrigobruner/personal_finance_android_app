@@ -11,6 +11,11 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
 
+    <!-- Home -->
+    <string name="home_accounts">Accounts</string>
+    <string name="home_expenses">Expenses</string>
+    <string name="home_incomes">Incomes</string>
+
     <!-- Account -->
     <string name="menu_accounts">Account</string>
     <string name="description_account">Account description</string>
@@ -50,25 +55,35 @@
     <string name="form_transaction_save_button">Save</string>
     <string name="form_transaction_save_msg">Transaction successfully created</string>
     <string name="form_transaction_save_error">Transaction creation failed</string>
+    <string name="form_transaction_required_field">Amount and data is required</string>
 
     <!-- Incomes -->
     <string name="menu_incomes">Incomes</string>
     <string name="form_income_add_button">Add New Income</string>
+    <string name="income_insert">Income successfully created</string>
     <string name="income_delete">Income successfully deleted</string>
     <string name="income_delete_error">Failed to delete the income, check that there are no transactions using this income. </string>
+
 
     <!-- Expenses -->
     <string name="menu_expenses">Expenses</string>
     <string name="form_expense_add_button">Add New Expense</string>
+    <string name="expense_insert">Expense successfully created</string>
     <string name="expense_delete">Expense successfully deleted</string>
     <string name="expense_delete_error">Failed to delete the expense, check that there are no transactions using this expense. </string>
 
     <!-- Transfers -->
     <string name="menu_transfers">Transfers</string>
     <string name="form_transfer_add_button">Add New Transfer</string>
+    <string name="form_transfer_from_same_account">From and To account cannot be the same</string>
+    <string name="transfer_insert">Transfer successfully created</string>
     <string name="transfer_delete">Transfer successfully deleted</string>
     <string name="transfer_delete_error">Failed to delete the transfer, check that there are no transactions using this transfer. </string>
 
+    <!-- transactions -->
+    <string name="transactions_insert_error">Failed to create this transaction</string>
+
+    <!-- Settings -->
     <string name="menu_settings">Settings</string>
 
 </resources>

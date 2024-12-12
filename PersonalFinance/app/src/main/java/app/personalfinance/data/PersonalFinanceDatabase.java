@@ -18,7 +18,7 @@ import app.personalfinance.data.transfers.TransferDao;
 import app.personalfinance.data.transfers.TransferModel;
 
 // Set up the database, define the entities and the version
-@Database(entities = {CategoryModel.class, AccountModel.class, TransactionModel.class, TransferModel.class}, version = 4)
+@Database(entities = {CategoryModel.class, AccountModel.class, TransactionModel.class, TransferModel.class}, version = 5)
 public abstract class PersonalFinanceDatabase extends RoomDatabase {
 
     private static volatile PersonalFinanceDatabase instance; // Singleton

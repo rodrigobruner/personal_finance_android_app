@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -37,6 +38,8 @@ public class TransfersFragment extends Fragment {
     // ViewModel
     private TransfersViewModel transfersViewModel;
 
+    ImageView noDataImage;
+
     // RecyclerView
     private RecyclerView recyclerView;
 
@@ -54,6 +57,8 @@ public class TransfersFragment extends Fragment {
 
         // get the button to add a transfer
         Button addButton = binding.buttonAddTransfers;
+        noDataImage = binding.imageViewTransfersNoData;
+
         // Onclick
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,25 +80,29 @@ public class TransfersFragment extends Fragment {
     }
 
     void bindRecyclerView() {
-        // Get the transfers list
-        LiveData<List<TransferWithDetails>> liveData = transfersViewModel.getAllTransfers();
+        executor.execute(() -> {
+            // Get the transfers list
+            LiveData<List<TransferWithDetails>> liveData = transfersViewModel.getAllTransfers();
 
-        // Observe the LiveData
-        liveData.observe(getViewLifecycleOwner(), transferList -> {
-            if (transferList != null) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                // Set the adapter
-                TransferAdapter adapter = new TransferAdapter(getContext(), (ArrayList<TransferWithDetails>) transferList, transfersViewModel);
-                recyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-                Log.d("TransfersFragment", "Adapter updated with transfers size: " + adapter.getItemCount());
+            // Observe the LiveData
+            mainHandler.post(() -> liveData.observe(getViewLifecycleOwner(), transferList -> {
+                if (transferList == null || transferList.isEmpty()) {
+                    noDataImage.setVisibility(View.VISIBLE);
+                    Log.d("TransfersFragment", "Transfer list is null");
+                } else {
+                    noDataImage.setVisibility(View.GONE);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    // Set the adapter
+                    TransferAdapter adapter = new TransferAdapter(getContext(), (ArrayList<TransferWithDetails>) transferList, transfersViewModel);
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    Log.d("TransfersFragment", "Adapter updated with transfers size: " + adapter.getItemCount());
 
-                // Swipe to delete
-                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteTransferCallback(adapter));
-                itemTouchHelper.attachToRecyclerView(recyclerView);
-            } else {
-                Log.d("TransfersFragment", "Transfer list is null");
-            }
+                    // Swipe to delete
+                    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteTransferCallback(adapter));
+                    itemTouchHelper.attachToRecyclerView(recyclerView);
+                }
+            }));
         });
     }
 
