@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -18,6 +19,9 @@ public interface CategoryDao {
 
     @Delete
     void delete(CategoryModel category);
+
+    @Update
+    void update(CategoryModel category);
 
     @Query("SELECT * FROM categories ORDER BY type")
     LiveData<List<CategoryModel>> getAllCategories();

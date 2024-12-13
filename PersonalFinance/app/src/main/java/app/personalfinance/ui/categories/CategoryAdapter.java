@@ -6,12 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.List;
-
 import app.personalfinance.R;
 import app.personalfinance.data.categories.CategoryModel;
 import app.personalfinance.viewModel.categories.CategoriesViewModel;
@@ -62,10 +59,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public void deleteItem(int position) {
         try {
             CategoryModel category = categories.get(position);
-            categoriesViewModel.deleteCategory(category);
-            categories.remove(position);
-            notifyItemRemoved(position);
-            Toast.makeText(context, R.string.category_delete, Toast.LENGTH_SHORT).show();
+            categoriesViewModel.deleteCategory(category, status -> {
+                if (status) {
+                    categories.remove(position);
+                    notifyItemRemoved(position);
+                    Toast.makeText(context, R.string.category_delete, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, R.string.category_delete_error, Toast.LENGTH_SHORT).show();
+                }
+                this.notifyDataSetChanged();
+            });
         } catch (Exception e) {
             Toast.makeText(context, R.string.category_delete_error, Toast.LENGTH_SHORT).show();
         }

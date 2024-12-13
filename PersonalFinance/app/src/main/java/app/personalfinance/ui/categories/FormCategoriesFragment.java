@@ -48,10 +48,15 @@ public class FormCategoriesFragment extends Fragment {
                     String categoryType = radioGroupCategoryType.getCheckedRadioButtonId() == R.id.radioButtonCategoryIncome
                             ? CategoriesTypes.INCOME : CategoriesTypes.EXPENSE;
 
-                    categoriesViewModel.saveCategory(categoryName, categoryType);
-                    Toast.makeText(getContext(), getString(R.string.form_category_save_msg), Toast.LENGTH_LONG).show();
-                    NavController navController = Navigation.findNavController(v);
-                    navController.navigate(R.id.action_formCategoriesFragment_to_categoriesFragment);
+                    categoriesViewModel.saveCategory(categoryName, categoryType, status -> {
+                        if (status) {
+                            Toast.makeText(getContext(), getString(R.string.form_category_save_msg), Toast.LENGTH_LONG).show();
+                            NavController navController = Navigation.findNavController(v);
+                            navController.navigate(R.id.action_formCategoriesFragment_to_categoriesFragment);
+                        } else {
+                            Toast.makeText(getContext(), getString(R.string.form_category_save_error), Toast.LENGTH_LONG).show();
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getContext(), getString(R.string.form_category_save_error), Toast.LENGTH_LONG).show();

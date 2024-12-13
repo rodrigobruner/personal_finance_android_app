@@ -1,13 +1,11 @@
 package app.personalfinance.viewModel.transactions;
 
 import android.app.Application;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-
-import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
 
 import app.personalfinance.data.helpper.DataChartLabelValue;
 import app.personalfinance.data.transactions.TransactionModel;
@@ -23,12 +21,12 @@ public class TransactionsViewModel extends AndroidViewModel {
         repository = new TransactionRepository(application);
     }
 
-    public void insertTransaction(int account, int category, double amount, String description, String date, String type) {
-        repository.insert(new TransactionModel(account, category, amount, description, date, type));
+    public void insertTransaction(int account, int category, double amount, String description, String date, String type, Consumer<Boolean> callback) {
+        repository.insert(new TransactionModel(account, category, amount, description, date, type), callback);
     }
 
-    public void deleteTransaction(TransactionModel transaction) {
-        repository.delete(transaction);
+    public void deleteTransaction(TransactionModel transaction, Consumer<Boolean> callback) {
+        repository.delete(transaction, callback);
     }
 
     public LiveData<List<TransactionWithDetails>> getAllTransactions() {

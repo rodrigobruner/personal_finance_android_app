@@ -136,14 +136,20 @@ public class FormTransactionsFragment extends Fragment {
                         //Get transaction view model
                         TransactionsViewModel transactionsViewModel = new ViewModelProvider(FormTransactionsFragment.this).get(TransactionsViewModel.class);
                         //Insert transaction
-                        transactionsViewModel.insertTransaction(account, category, amount, description, date, type);
+                        transactionsViewModel.insertTransaction(account, category, amount, description, date, type, status -> {
+                            if (!status) {
+                                Toast.makeText(getContext(), getString(R.string.transactions_insert_error), Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
                         //Is to subtract or add amount
                         Double amountUpdate = currentTabPosition == 0 ? amount : -amount;
                         //Get account view model
                         AccountsViewModel accountsViewModel = new ViewModelProvider(FormTransactionsFragment.this).get(AccountsViewModel.class);
                         //Update account balance
-                        accountsViewModel.updateAccountBalance(account, amountUpdate);
+                        accountsViewModel.updateAccountBalance(account, amountUpdate, status -> {
+                            //TODO: rollback transaction if account balance update fails
+                        });
 
                         //check if is income or expense and get success message
                         String msg = currentTabPosition == 0 ? getString(R.string.income_insert) :
@@ -168,13 +174,22 @@ public class FormTransactionsFragment extends Fragment {
                         //Get transfer view model
                         TransfersViewModel transfersViewModel = new ViewModelProvider(FormTransactionsFragment.this).get(TransfersViewModel.class);
                         //Insert transfer
-                        transfersViewModel.insertTransfer(fromAccount, toAccount, amount, description, date);
+                        transfersViewModel.insertTransfer(fromAccount, toAccount, amount, description, date, status -> {
+                            if (!status) {
+                                Toast.makeText(getContext(), getString(R.string.transactions_insert_error), Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
                         //Get account view model
                         AccountsViewModel accountsViewModel = new ViewModelProvider(FormTransactionsFragment.this).get(AccountsViewModel.class);
                         //Update account balances
-                        accountsViewModel.updateAccountBalance(fromAccount, amount*-1);
-                        accountsViewModel.updateAccountBalance(toAccount, amount);
+                        accountsViewModel.updateAccountBalance(fromAccount, amount*-1, status -> {
+                            //TODO: rollback transfer if account balance update fails
+                        });
+
+                        accountsViewModel.updateAccountBalance(toAccount, amount, status -> {
+                            //TODO: rollback transfer if account balance update fails
+                        });
 
                         //Show success message
                         Toast.makeText(getContext(), getString(R.string.transfer_insert), Toast.LENGTH_SHORT).show();

@@ -43,10 +43,15 @@ public class FormAccountsFragment extends Fragment {
                 try {
                     String accountName = editTextAccountName.getText().toString();
                     String accountBalance = editTextAccountBalance.getText().toString();
-                    accountsViewModel.saveAccount(accountName, Double.parseDouble(accountBalance));
-                    Toast.makeText(getContext(), getString(R.string.form_account_save_msg), Toast.LENGTH_LONG).show();
-                    NavController navController = Navigation.findNavController(v);
-                    navController.navigate(R.id.action_formAccountsFragment_to_accountsFragment);
+                    accountsViewModel.saveAccount(accountName, Double.parseDouble(accountBalance), status -> {
+                        if (status) {
+                            Toast.makeText(getContext(), getString(R.string.form_account_save_msg), Toast.LENGTH_LONG).show();
+                            NavController navController = Navigation.findNavController(v);
+                            navController.navigate(R.id.action_formAccountsFragment_to_accountsFragment);
+                        } else {
+                            Toast.makeText(getContext(), getString(R.string.form_account_save_error), Toast.LENGTH_LONG).show();
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getContext(), getString(R.string.form_account_save_error), Toast.LENGTH_LONG).show();

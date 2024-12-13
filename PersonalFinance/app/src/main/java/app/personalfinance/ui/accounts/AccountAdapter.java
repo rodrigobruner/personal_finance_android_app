@@ -1,24 +1,18 @@
 package app.personalfinance.ui.accounts;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteConstraintException;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import app.personalfinance.R;
 import app.personalfinance.data.accounts.AccountModel;
 import app.personalfinance.helpper.CurrencyFormatter;
@@ -72,7 +66,6 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
         AccountModel account = accounts.get(position);
         // Set the account name
         holder.accountName.setText(account.getName());
@@ -88,39 +81,21 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
 
     // Function to delete an account
     public void deleteItem(int position) {
-        executor.execute(() -> {
-            try {
-                if (position >= 0 && position < accounts.size()) {
-                    Log.e("AccountAdapter", "Deleting account");
-                    AccountModel account = accounts.get(position); // Get the account
-                    accountsViewModel.deleteAccount(account); // Delete the account
-                    Log.e("AccountAdapter", "Deleting account2");
+        try {
+            AccountModel account = accounts.get(position); // Get the account
+            accountsViewModel.deleteAccount(account, status -> {
+                if (status) {
                     accounts.remove(position); // Remove the account from the list
-                    Log.e("AccountAdapter", "Deleting account3");
-                    mainHandler.post(() -> {
-                        notifyItemRemoved(position); // Notify the adapter that the item was removed
-                        // Notify the user that the account was deleted
-                        Toast.makeText(context, R.string.account_delete, Toast.LENGTH_SHORT).show();
-                    });
+                    notifyItemRemoved(position); // Notify the adapter that the item was removed
+                    Toast.makeText(context, R.string.account_delete, Toast.LENGTH_SHORT).show();
                 } else {
-                    mainHandler.post(() -> {
-                        // Notify the user that the account was not deleted
-                        Toast.makeText(context, R.string.account_delete_error, Toast.LENGTH_SHORT).show();
-                    });
+                    Toast.makeText(context, R.string.account_delete_error, Toast.LENGTH_SHORT).show();
                 }
-            } catch (SQLiteConstraintException e) {
-                Log.e("AccountAdapter", "Cannot delete account with linked transactions", e);
-                mainHandler.post(() -> {
-                    // Notify the user that the account cannot be deleted due to linked transactions
-                    Toast.makeText(context, R.string.account_delete_error, Toast.LENGTH_SHORT).show();
-                });
-            } catch (Exception e) {
-                Log.e("AccountAdapter", "Error deleting account", e);
-                mainHandler.post(() -> {
-                    // Notify the user that the account was not deleted
-                    Toast.makeText(context, R.string.account_delete_error, Toast.LENGTH_SHORT).show();
-                });
-            }
-        });
+                this.notifyDataSetChanged();
+            });
+        } catch (Exception e) {
+            // Notify the user that the account cannot be deleted due to linked transactions
+            Toast.makeText(context, R.string.account_delete_error, Toast.LENGTH_SHORT).show();
+        }
     }
 }

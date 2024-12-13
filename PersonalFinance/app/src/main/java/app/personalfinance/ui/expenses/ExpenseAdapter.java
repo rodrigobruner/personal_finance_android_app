@@ -1,14 +1,12 @@
 package app.personalfinance.ui.expenses;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -58,20 +56,22 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     }
 
     public void deleteItem(int position) {
-        if (position >= 0 && position < expenses.size()) {
-            try {
-                TransactionWithDetails expense = expenses.get(position); // Get the expense
-                expenses.remove(position); // Remove the expense from the list
-                transactionsViewModel.deleteTransaction(expense.transaction); // Delete the expense
-                notifyItemRemoved(position); // Notify the adapter that the item was removed
-                // Notify the user that the expense was deleted
-                Toast.makeText(context, R.string.income_delete, Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                // Notify the user that the expense was not deleted
-                Toast.makeText(context, R.string.income_delete_error, Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Log.e("ExpenseAdapter", "Invalid position: " + position);
+        try {
+            TransactionWithDetails expense = expenses.get(position); // Get the expense
+            transactionsViewModel.deleteTransaction(expense.transaction, status ->{
+                if(status){
+                    expenses.remove(position); // Remove the expense from the list
+                    notifyItemRemoved(position); // Notify the adapter that the item was removed
+                    // Notify the user that the expense was deleted
+                    Toast.makeText(context, R.string.income_delete, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, R.string.income_delete_error, Toast.LENGTH_SHORT).show();
+                }
+                this.notifyDataSetChanged();
+            }); // Delete the expense
+        } catch (Exception e) {
+            // Notify the user that the expense was not deleted
+            Toast.makeText(context, R.string.income_delete_error, Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -16,6 +17,9 @@ import app.personalfinance.data.helpper.DataChartLabelValue;
 public interface TransactionDAO {
     @Insert
     void insert(TransactionModel transaction);
+
+    @Update
+    void update(TransactionModel transaction);
 
     @Delete
     void delete(TransactionModel transaction);
