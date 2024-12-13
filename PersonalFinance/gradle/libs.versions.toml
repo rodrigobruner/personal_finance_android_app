@@ -38,6 +38,7 @@ lifecycleextensions = { group = "androidx.lifecycle", name = "lifecycle-extensio
 lifecyclecompile = { group = "androidx.lifecycle", name = "lifecycle-compiler", version.ref = "lifecyclecompile" }
 room-common = { group = "androidx.room", name = "room-common", version.ref = "roomCommon" }
 cardview = { group = "androidx.cardview", name = "cardview", version = "1.0.0" }
+mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version = "v3.1.0" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

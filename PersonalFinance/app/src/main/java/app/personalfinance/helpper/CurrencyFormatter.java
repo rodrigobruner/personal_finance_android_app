@@ -10,4 +10,16 @@ public class CurrencyFormatter {
     public static double convert(String value) {
         return Double.parseDouble(value.replace("$", ""));
     }
+
+    public static String formatString(String text) {
+        if (text.isEmpty()) {
+            return "$";
+        }
+        try {
+            double value = Double.parseDouble(text.replace("$", ""));
+            return String.format("$%.2f", value);
+        } catch (NumberFormatException e) {
+            return text;
+        }
+    }
 }

@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import java.util.Date;
 import java.util.List;
 
+import app.personalfinance.data.helpper.DataChartLabelValue;
 import app.personalfinance.data.transactions.TransactionModel;
 import app.personalfinance.data.transactions.TransactionWithDetails;
 import app.personalfinance.repo.transactions.TransactionRepository;
@@ -40,5 +41,9 @@ public class TransactionsViewModel extends AndroidViewModel {
 
     public LiveData<List<TransactionWithDetails>> getAllExpenses() {
         return repository.getAllExpenses();
+    }
+
+    public LiveData<List<DataChartLabelValue>> getCurrentMonthSummaryByType(String type) {
+        return repository.getCurrentMonthSummaryByType(type);
     }
 }

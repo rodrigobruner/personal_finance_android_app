@@ -67,6 +67,10 @@ public class FormTransactionsFragment extends Fragment {
         textViewFrom = view.findViewById(R.id.textViewTranscationFrom);
         textViewTo = view.findViewById(R.id.textViewTranscationTo);
 
+        numericKeyboard(view, editTextAmount);
+        //Set current date
+        clearForm();
+
         //Create date picker
         calendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -94,64 +98,90 @@ public class FormTransactionsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 try {
+                    //Get current tab position
                     ViewPager2 viewPager = getActivity().findViewById(R.id.viewPager);
                     int currentTabPosition = viewPager.getCurrentItem();
 
+                    //Get data from form
+                    Double amount = CurrencyFormatter.convert(editTextAmount.getText().toString());
+                    String description = editTextDescription.getText().toString();
+                    String date = editTextDate.getText().toString();
+
+                    //Check if required fields are filled
+                    if (amount <= 0 || date.isEmpty()) {
+                        Toast.makeText(getContext(), getString(R.string.form_transaction_required_field), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    //get category and account
                     int category = 0;
                     int account = 0;
 
+                    //if is income, category and accout is loaded
                     if (currentTabPosition == 0) {
                         type = CategoriesTypes.INCOME;
                         category = categories.get(spinnerFrom.getSelectedItemPosition()).getId();
                         account = accounts.get(spinnerTo.getSelectedItemPosition()).getId();
                     }
 
+                    //if is expense, category and accout is loaded
                     if (currentTabPosition == 1) {
                         category = categories.get(spinnerTo.getSelectedItemPosition()).getId();
                         account = accounts.get(spinnerFrom.getSelectedItemPosition()).getId();
                         type = CategoriesTypes.EXPENSE;
                     }
 
-                    Double amount = CurrencyFormatter.convert(editTextAmount.getText().toString());
-                    String description = editTextDescription.getText().toString();
-                    String date = editTextDate.getText().toString();
-
-                    if (amount <= 0 || date.isEmpty()) {
-                        Toast.makeText(getContext(), getString(R.string.form_transaction_required_field), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
+                    //if is a transaction (income or expense)
                     if (currentTabPosition == 0 || currentTabPosition == 1) {
+                        //Get transaction view model
                         TransactionsViewModel transactionsViewModel = new ViewModelProvider(FormTransactionsFragment.this).get(TransactionsViewModel.class);
+                        //Insert transaction
                         transactionsViewModel.insertTransaction(account, category, amount, description, date, type);
 
+                        //Is to subtract or add amount
                         Double amountUpdate = currentTabPosition == 0 ? amount : -amount;
-
+                        //Get account view model
                         AccountsViewModel accountsViewModel = new ViewModelProvider(FormTransactionsFragment.this).get(AccountsViewModel.class);
+                        //Update account balance
                         accountsViewModel.updateAccountBalance(account, amountUpdate);
 
-
+                        //check if is income or expense and get success message
                         String msg = currentTabPosition == 0 ? getString(R.string.income_insert) :
                                                                 getString(R.string.expense_insert);
+                        //show success message
                         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        clearForm(); //clear form
                     }
 
+                    //if is a transfer
                     if (currentTabPosition == 2) {
-                        int accountFrom = accounts.get(spinnerFrom.getSelectedItemPosition()).getId();
+                        //Get account from and to
+                        int fromAccount = accounts.get(spinnerFrom.getSelectedItemPosition()).getId();
                         int toAccount = accounts.get(spinnerTo.getSelectedItemPosition()).getId();
 
-                        if (accountFrom == toAccount) {
+                        //Check if account from and to are the same
+                        if (fromAccount == toAccount) {
                             Toast.makeText(getContext(), getString(R.string.form_transfer_from_same_account), Toast.LENGTH_SHORT).show();
                             return;
                         }
 
+                        //Get transfer view model
                         TransfersViewModel transfersViewModel = new ViewModelProvider(FormTransactionsFragment.this).get(TransfersViewModel.class);
-                        transfersViewModel.insertTransfer(accountFrom, toAccount, amount, description, date);
+                        //Insert transfer
+                        transfersViewModel.insertTransfer(fromAccount, toAccount, amount, description, date);
 
+                        //Get account view model
+                        AccountsViewModel accountsViewModel = new ViewModelProvider(FormTransactionsFragment.this).get(AccountsViewModel.class);
+                        //Update account balances
+                        accountsViewModel.updateAccountBalance(fromAccount, amount*-1);
+                        accountsViewModel.updateAccountBalance(toAccount, amount);
+
+                        //Show success message
                         Toast.makeText(getContext(), getString(R.string.transfer_insert), Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {
+                    //Show error message
                     Toast.makeText(getContext(), getString(R.string.transactions_insert_error), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
@@ -159,6 +189,52 @@ public class FormTransactionsFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void numericKeyboard(View view, EditText target) {
+        int[] numberButtonIds = {
+                R.id.buttonNumericKeypad0,
+                R.id.buttonNumericKeypad1,
+                R.id.buttonNumericKeypad2,
+                R.id.buttonNumericKeypad3,
+                R.id.buttonNumericKeypad4,
+                R.id.buttonNumericKeypad5,
+                R.id.buttonNumericKeypad6,
+                R.id.buttonNumericKeypad7,
+                R.id.buttonNumericKeypad8,
+                R.id.buttonNumericKeypad9,
+                R.id.buttonNumericKeypadDot
+        };
+
+        for (int id : numberButtonIds) {
+            view.findViewById(id).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Button button = (Button) v;
+                    String currentText = target.getText().toString();
+                    target.setText(currentText + button.getText().toString());
+                }
+            });
+        }
+
+        Button buttonDelete = view.findViewById(R.id.buttonNumericKeypadDelete);
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String currentText = target.getText().toString();
+                if (!currentText.isEmpty()) {
+                    target.setText(currentText.substring(0, currentText.length() - 1));
+                }
+            }
+        });
+
+    }
+
+    //Clear form
+    private void clearForm() {
+        editTextAmount.setText("");
+        editTextDescription.setText("");
+        editTextDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
     }
 
 

@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.lifecycleextensions)
     annotationProcessor(libs.lifecyclecompile)
     implementation(libs.cardview)
+    implementation(libs.mpandroidchart)
 
     implementation libs.appcompat
     implementation libs.material

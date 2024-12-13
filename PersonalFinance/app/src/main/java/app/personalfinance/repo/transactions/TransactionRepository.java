@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import app.personalfinance.data.PersonalFinanceDatabase;
+import app.personalfinance.data.helpper.DataChartLabelValue;
 import app.personalfinance.data.transactions.TransactionDAO;
 import app.personalfinance.data.transactions.TransactionModel;
 import app.personalfinance.data.transactions.TransactionWithDetails;
@@ -56,5 +57,11 @@ public class TransactionRepository {
     // Function to get all expenses
     public LiveData<List<TransactionWithDetails>> getAllExpenses() {
         return transactionDao.getAllExpenses();
+    }
+
+
+    // Function to get the current month summary by type
+    public LiveData<List<DataChartLabelValue>> getCurrentMonthSummaryByType(String type) {
+        return transactionDao.getCurrentMonthSummaryByType(type);
     }
 }

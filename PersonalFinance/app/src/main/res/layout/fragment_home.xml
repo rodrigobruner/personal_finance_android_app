@@ -40,4 +40,21 @@
         android:textStyle="bold"
         android:text="@string/home_expenses" />
 
+    <include
+        layout="@layout/component_pie_expenses_chart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="@string/home_incomes" />
+
+    <include
+        layout="@layout/component_pie_incomes_chart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

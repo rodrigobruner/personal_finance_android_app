@@ -1,49 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/textViewTranscationFrom"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:text="@string/form_transaction_account" />
+        android:orientation="horizontal">
 
-    <Spinner
-        android:id="@+id/spinnerTranscationFrom"
+        <TextView
+            android:id="@+id/textViewTranscationFrom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:text="@string/form_transaction_account" />
+
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:id="@+id/textViewTranscationTo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:text="@string/form_transaction_account" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="From"
-        android:textSize="18sp"
-        android:minHeight="48dp"/>
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/textViewTranscationTo"
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:text="@string/form_transaction_category" />
+        <Spinner
+            android:id="@+id/spinnerTranscationFrom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="45"
+            android:hint="From"
+            android:textSize="18sp"
+            android:minHeight="48dp"/>
 
-    <Spinner
-        android:id="@+id/spinnerTranscationTo"
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="20dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/arrow" />
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="To"
-        android:textSize="18sp"
-        android:minHeight="48dp"/>
-
-    <EditText
-        android:id="@+id/editTextTranscationAmount"
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/form_transaction_amount"
-        android:inputType="numberDecimal"/>
+        <Spinner
+            android:id="@+id/spinnerTranscationTo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="45"
+            android:hint="To"
+            android:textSize="18sp"
+            android:minHeight="48dp"/>
+    </LinearLayout>
 
     <EditText
         android:id="@+id/editTextTranscationDescription"
@@ -60,6 +75,149 @@
         android:hint="@string/form_transaction_date"
         android:inputType="date"/>
 
+    <EditText
+        android:id="@+id/editTextTranscationAmount"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="35dp"
+        android:hint="@string/form_transaction_amount"
+        android:inputType="numberDecimal"/>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:rowCount="4"
+            android:columnCount="3"
+            android:layout_gravity="center">
+
+            <Button
+                android:id="@+id/buttonNumericKeypad1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="1" />
+
+            <Button
+                android:id="@+id/buttonNumericKeypad2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="2" />
+
+            <Button
+                android:id="@+id/buttonNumericKeypad3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_row="0"
+                android:layout_column="2"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="3" />
+
+            <Button
+                android:id="@+id/buttonNumericKeypad4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="4" />
+
+            <Button
+                android:id="@+id/buttonNumericKeypad5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="5" />
+
+            <Button
+                android:id="@+id/buttonNumericKeypad6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_row="1"
+                android:layout_column="2"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="6" />
+
+            <Button
+                android:id="@+id/buttonNumericKeypad7"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_row="2"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="7" />
+
+            <Button
+                android:id="@+id/buttonNumericKeypad8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_row="2"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="8" />
+
+            <Button
+                android:id="@+id/buttonNumericKeypad9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_row="2"
+                android:layout_column="2"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="9" />
+
+            <Button
+                android:id="@+id/buttonNumericKeypad0"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_row="3"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="0" />
+
+            <Button
+                android:id="@+id/buttonNumericKeypadDot"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_row="3"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="." />
+
+            <Button
+                android:id="@+id/buttonNumericKeypadDelete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_row="3"
+                android:layout_column="2"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="Delete" />
+        </GridLayout>
+    </LinearLayout>
     <Button
         android:id="@+id/buttonSave"
         android:layout_marginTop="50dp"
