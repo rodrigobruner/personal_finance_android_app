@@ -22,14 +22,21 @@ import app.personalfinance.viewModel.accounts.AccountsViewModel;
 public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHolder> {
     // List of accounts
     public ArrayList<AccountModel> accounts;
-    // Context,
+    // Context
     private Context context;
     // ViewModel for delete accounts
-    private AccountsViewModel accountsViewModel; // ViewModel
+    private AccountsViewModel accountsViewModel;
 
     // Executor and Handler
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Handler mainHandler = new Handler(Looper.getMainLooper());
+
+    // Interface for item click listener
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    private OnItemClickListener listener;
 
     // Constructor
     public AccountAdapter(Context context,
@@ -40,28 +47,45 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
         this.accountsViewModel = accountsViewModel;
     }
 
+    // Method to set the item click listener
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
     // Describes an item view and metadata
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        //Define the widgets
+        // Define the widgets
         public TextView accountName, accountCurrentBalance;
 
-        //Constructor
-        public ViewHolder(@NonNull View itemView) {
+        // Constructor
+        public ViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
 
-            //Get instances of the widgets
+            // Get instances of the widgets
             accountName = itemView.findViewById(R.id.textViewAccountName);
             accountCurrentBalance = itemView.findViewById(R.id.textViewAccountCurrentBalance);
+
+            // Set the click listener for the item view
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
-
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.listview_accounts, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, listener);
     }
 
     @Override

@@ -16,10 +16,14 @@ import app.personalfinance.helpper.CurrencyFormatter;
 import app.personalfinance.viewModel.transactions.TransactionsViewModel;
 
 public class IncomeAdapter extends RecyclerView.Adapter<IncomeAdapter.ViewHolder> {
+    // List of incomes
     private ArrayList<TransactionWithDetails> incomes;
+    // Context
     private Context context;
+    // TransactionsViewModel
     TransactionsViewModel transactionsViewModel;
 
+    // Constructor
     public IncomeAdapter(Context context, ArrayList<TransactionWithDetails> incomes, TransactionsViewModel transactionsViewModel) {
         this.context = context;
         this.incomes = incomes;
@@ -27,11 +31,13 @@ public class IncomeAdapter extends RecyclerView.Adapter<IncomeAdapter.ViewHolder
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        // define icon, category and account, date and amount
         ImageView icon;
         TextView categoryAccount, date, amount;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
+            // set widgets
             icon = itemView.findViewById(R.id.imageViewIcon);
             categoryAccount = itemView.findViewById(R.id.textViewCategoryAccount);
             date = itemView.findViewById(R.id.textViewDate);
@@ -48,7 +54,9 @@ public class IncomeAdapter extends RecyclerView.Adapter<IncomeAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        // Get the income
         TransactionWithDetails income = incomes.get(position);
+        // Set the category, account, date and amount
         holder.icon.setImageResource(R.drawable.icon_income); // Set the icon resource
         holder.categoryAccount.setText(income.category.getName() + " -> " + income.account.getName());
         holder.date.setText(income.transaction.getDate());

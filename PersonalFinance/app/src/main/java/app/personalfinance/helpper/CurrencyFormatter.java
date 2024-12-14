@@ -7,10 +7,12 @@ public class CurrencyFormatter {
         return "$"+String.format("%.2f", value);
     }
 
+    // Convert a currency string to a double value
     public static double convert(String value) {
         return Double.parseDouble(value.replace("$", ""));
     }
 
+    // Format a string to a currency string
     public static String formatString(String text) {
         if (text.isEmpty()) {
             return "$";

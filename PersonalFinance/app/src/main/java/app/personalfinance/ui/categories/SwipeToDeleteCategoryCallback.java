@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+// Callback for swipe to delete category
 public class SwipeToDeleteCategoryCallback extends ItemTouchHelper.SimpleCallback {
 
     private CategoryAdapter mAdapter;

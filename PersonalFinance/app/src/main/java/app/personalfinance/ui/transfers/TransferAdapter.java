@@ -16,8 +16,11 @@ import app.personalfinance.helpper.CurrencyFormatter;
 import app.personalfinance.viewModel.transfers.TransfersViewModel;
 
 public class TransferAdapter extends RecyclerView.Adapter<TransferAdapter.ViewHolder> {
+    // List of transfers
     private ArrayList<TransferWithDetails> transfers;
+    // Context
     private Context context;
+    // TransfersViewModel
     TransfersViewModel transfersViewModel;
 
     public TransferAdapter(Context context, ArrayList<TransferWithDetails> transfers, TransfersViewModel transfersViewModel) {
@@ -27,11 +30,13 @@ public class TransferAdapter extends RecyclerView.Adapter<TransferAdapter.ViewHo
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        // Widgets
         ImageView icon;
         TextView categoryAccount, date, amount;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
+            // Get the widgets
             icon = itemView.findViewById(R.id.imageViewIcon);
             categoryAccount = itemView.findViewById(R.id.textViewAccounts);
             date = itemView.findViewById(R.id.textViewDate);
@@ -48,7 +53,9 @@ public class TransferAdapter extends RecyclerView.Adapter<TransferAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        // Get the transfer
         TransferWithDetails transfer = transfers.get(position);
+        // Set the values
         holder.icon.setImageResource(R.drawable.icon_transfers); // Set the icon resource
         holder.categoryAccount.setText(transfer.from.getName() + " -> " + transfer.to.getName());
         holder.date.setText(transfer.transfer.getDate());
@@ -59,7 +66,7 @@ public class TransferAdapter extends RecyclerView.Adapter<TransferAdapter.ViewHo
         try {
             TransferWithDetails transfer = transfers.get(position); // Get the transfer
             transfersViewModel.deleteTransfer(transfer.transfer, status -> {
-                if(status) {
+                if(status) { // If the transfer was deleted
                     transfers.remove(position); // Remove the transfer from the list
                     notifyItemRemoved(position); // Notify the adapter that the item was removed
                     // Notify the user that the transfer was deleted

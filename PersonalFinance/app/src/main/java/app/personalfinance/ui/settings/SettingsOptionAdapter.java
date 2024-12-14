@@ -7,9 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-
 import app.personalfinance.R;
 import app.personalfinance.data.settings.SettingsOption;
 
@@ -23,13 +21,13 @@ public class SettingsOptionAdapter extends ArrayAdapter<SettingsOption> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.listview_settings, parent, false);
         }
-
+        // get the data item for this position
         SettingsOption option = getItem(position);
-
+        // get the widgets
         TextView title = convertView.findViewById(R.id.textViewTitle);
         TextView description = convertView.findViewById(R.id.textViewDescription);
         ImageView icon = convertView.findViewById(R.id.imageView2);
-
+        // set the values
         title.setText(option.getTitle());
         description.setText(option.getDescription());
         icon.setImageResource(option.getIcon());

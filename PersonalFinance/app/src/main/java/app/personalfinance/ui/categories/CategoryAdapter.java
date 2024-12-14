@@ -14,10 +14,14 @@ import app.personalfinance.data.categories.CategoryModel;
 import app.personalfinance.viewModel.categories.CategoriesViewModel;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
+    // Category list
     private List<CategoryModel> categories;
+    // Context
     private Context context;
+    // Categories view model
     private CategoriesViewModel categoriesViewModel;
 
+    // Constructor
     public CategoryAdapter(Context context,
                            List<CategoryModel> categories,
                            CategoriesViewModel categoriesViewModel) {
@@ -35,11 +39,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
-        CategoryModel category = categories.get(position);
+        CategoryModel category = categories.get(position); // Get category
+        // Set category name and type
         holder.categoryName.setText(category.getName());
         holder.categoryType.setText(category.getType());
-
+        // Set category type color, default is green
         holder.categoryType.setTextColor(context.getResources().getColor(R.color.green));
+        // If category type is expense, set color to red
         if (category.getType().equalsIgnoreCase("expense")) {
             holder.categoryType.setTextColor(context.getResources().getColor(R.color.red));
         }
@@ -50,36 +56,44 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         return categories.size();
     }
 
+    // Update categories
     public void updateCategories(List<CategoryModel> newCategories) {
         this.categories.clear();
         this.categories.addAll(newCategories);
         notifyDataSetChanged();
     }
 
+    // Delete category
     public void deleteItem(int position) {
         try {
+            // Get category
             CategoryModel category = categories.get(position);
+            // Delete category
             categoriesViewModel.deleteCategory(category, status -> {
-                if (status) {
-                    categories.remove(position);
-                    notifyItemRemoved(position);
+                if (status) { // If success
+                    categories.remove(position); // Remove category
+                    notifyItemRemoved(position); // Notify item removed
+                    // Show message
                     Toast.makeText(context, R.string.category_delete, Toast.LENGTH_SHORT).show();
                 } else {
+                    // if failed, show error message
                     Toast.makeText(context, R.string.category_delete_error, Toast.LENGTH_SHORT).show();
                 }
-                this.notifyDataSetChanged();
+                this.notifyDataSetChanged(); // Notify data set changed
             });
-        } catch (Exception e) {
+        } catch (Exception e) { // If error, show error message
             Toast.makeText(context, R.string.category_delete_error, Toast.LENGTH_SHORT).show();
         }
     }
 
     public static class CategoryViewHolder extends RecyclerView.ViewHolder {
+        //define widgets
         TextView categoryName;
         TextView categoryType;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
+            //set widgets
             categoryName = itemView.findViewById(R.id.textViewCategoryName);
             categoryType = itemView.findViewById(R.id.textViewCategoryType);
         }

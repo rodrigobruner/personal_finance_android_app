@@ -25,5 +25,5 @@
         android:id="@+id/buttonSaveAccount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/form_account_add_button" />
+        android:text="@string/form_account_save_button" />
 </LinearLayout>

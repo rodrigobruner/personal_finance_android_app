@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -19,16 +18,13 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import app.personalfinance.R;
 import app.personalfinance.data.transactions.TransactionWithDetails;
 import app.personalfinance.databinding.FragmentExpensesBinding;
-import app.personalfinance.viewModel.expenses.ExpensesViewModel;
 import app.personalfinance.viewModel.transactions.TransactionsViewModel;
 
 // Fragment for the expenses list
@@ -36,8 +32,6 @@ public class ExpensesFragment extends Fragment {
     // Binding
     private FragmentExpensesBinding binding;
     // ViewModel
-    private ExpensesViewModel expensesViewModel;
-
     private TransactionsViewModel transactionsViewModel;
     // RecyclerView
     private RecyclerView recyclerView;
@@ -50,7 +44,6 @@ public class ExpensesFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        expensesViewModel = new ViewModelProvider(this).get(ExpensesViewModel.class);
 
         transactionsViewModel = new ViewModelProvider(this).get(TransactionsViewModel.class);
 

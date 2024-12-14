@@ -15,27 +15,31 @@
         android:id="@+id/nav_incomes"
         android:name="app.personalfinance.ui.incomes.IncomesFragment"
         android:label="@string/menu_incomes"
-        tools:layout="@layout/fragment_incomes" />
+        tools:layout="@layout/fragment_incomes">
         <action
             android:id="@+id/action_incomesFragment_to_transactionsFragment"
             app:destination="@id/nav_transactions" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_expenses"
         android:name="app.personalfinance.ui.expenses.ExpensesFragment"
         android:label="@string/menu_expenses"
-        tools:layout="@layout/fragment_expenses" />
+        tools:layout="@layout/fragment_expenses">
         <action
             android:id="@+id/action_expensesFragment_to_transactionsFragment"
             app:destination="@id/nav_transactions" />
+    </fragment>
+
     <fragment
         android:id="@+id/nav_transfers"
         android:name="app.personalfinance.ui.transfers.TransfersFragment"
         android:label="@string/menu_transfers"
-        tools:layout="@layout/fragment_transfers" />
+        tools:layout="@layout/fragment_transfers">
         <action
             android:id="@+id/action_transfersFragment_to_transactionsFragment"
             app:destination="@id/nav_transactions" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_settings"
@@ -48,13 +52,21 @@
         <action
             android:id="@+id/action_settings_to_accounts"
             app:destination="@id/nav_accounts" />
-
     </fragment>
+
     <fragment
         android:id="@+id/nav_transactions"
         android:name="app.personalfinance.ui.transactions.TransactionsFragment"
         android:label="@string/menu_transactions"
-        tools:layout="@layout/fragment_transactions" />
+        tools:layout="@layout/fragment_transactions">
+        <action
+            android:id="@+id/action_transactionsFragment_to_formTransactionsFragment"
+            app:destination="@id/nav_form_transactions" />
+        <action
+            android:id="@+id/action_formTransactionsFragment_to_homeFragment"
+            app:destination="@id/nav_home" />
+    </fragment>
+
     <fragment
         android:id="@+id/nav_accounts"
         android:name="app.personalfinance.ui.accounts.AccountsFragment"
@@ -67,6 +79,7 @@
             android:id="@+id/action_accountsFragment_to_formAccountsFragment"
             app:destination="@id/nav_form_accounts" />
     </fragment>
+
     <fragment
         android:id="@+id/nav_categories"
         android:name="app.personalfinance.ui.categories.CategoriesFragment"
@@ -89,12 +102,23 @@
             android:id="@+id/action_formAccountsFragment_to_accountsFragment"
             app:destination="@id/nav_accounts" />
     </fragment>
+
     <fragment
         android:id="@+id/nav_form_categories"
         android:name="app.personalfinance.ui.categories.FormCategoriesFragment"
         android:label="Form Categories"
-        tools:layout="@layout/fragment_form_categories" />
-    <action
-        android:id="@+id/action_formCategoriesFragment_to_categoriesFragment"
-        app:destination="@id/nav_categories" />
+        tools:layout="@layout/fragment_form_categories">
+        <action
+            android:id="@+id/action_formCategoriesFragment_to_categoriesFragment"
+            app:destination="@id/nav_categories" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_form_transactions"
+        android:name="app.personalfinance.ui.transactions.FormTransactionsFragment"
+        android:label="Form Transactions">
+        <action
+            android:id="@+id/action_formTransactionsFragment_to_homeFragment"
+            app:destination="@id/nav_home" />
+    </fragment>
 </navigation>

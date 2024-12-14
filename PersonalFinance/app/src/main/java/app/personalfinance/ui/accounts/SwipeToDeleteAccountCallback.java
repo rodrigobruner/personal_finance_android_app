@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+// Class to handdle the swipe to delete in the accounts list
 public class SwipeToDeleteAccountCallback extends ItemTouchHelper.SimpleCallback {
 
     private AccountAdapter mAdapter;

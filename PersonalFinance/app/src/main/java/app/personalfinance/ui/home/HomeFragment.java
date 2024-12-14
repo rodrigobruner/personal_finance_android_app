@@ -22,13 +22,13 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import app.personalfinance.MainActivity;
 import app.personalfinance.R;
 import app.personalfinance.data.accounts.AccountModel;
 import app.personalfinance.data.categories.CategoriesTypes;
-import app.personalfinance.data.helpper.DataChartLabelValue;
+import app.personalfinance.data.helpper.DataChartLabelValueModel;
 import app.personalfinance.databinding.FragmentHomeBinding;
 import app.personalfinance.viewModel.accounts.AccountsViewModel;
-import app.personalfinance.viewModel.home.HomeViewModel;
 import app.personalfinance.viewModel.transactions.TransactionsViewModel;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -41,6 +41,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 public class HomeFragment extends Fragment {
@@ -64,8 +65,6 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -170,12 +169,12 @@ public class HomeFragment extends Fragment {
 
     private void loadPieChartData(PieChart chart, String type) {
         executor.execute(() -> {
-            LiveData<List<DataChartLabelValue>> liveData = transactionsViewModel.getCurrentMonthSummaryByType(type);
+            LiveData<List<DataChartLabelValueModel>> liveData = transactionsViewModel.getCurrentMonthSummaryByType(type);
 
             mainHandler.post(() -> liveData.observe(getViewLifecycleOwner(), dataList -> {
                 if (dataList != null && !dataList.isEmpty()) {
                     ArrayList<PieEntry> entries = new ArrayList<>();
-                    for (DataChartLabelValue data : dataList) {
+                    for (DataChartLabelValueModel data : dataList) {
                         entries.add(new PieEntry(data.getValue(), data.getLabel()));
                     }
 

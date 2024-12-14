@@ -3,15 +3,13 @@ package app.personalfinance.repo.transactions;
 import android.app.Application;
 import android.os.Handler;
 import android.os.Looper;
-
 import androidx.lifecycle.LiveData;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
-
 import app.personalfinance.data.PersonalFinanceDatabase;
-import app.personalfinance.data.helpper.DataChartLabelValue;
+import app.personalfinance.data.helpper.DataChartLabelValueModel;
 import app.personalfinance.data.transactions.TransactionDAO;
 import app.personalfinance.data.transactions.TransactionModel;
 import app.personalfinance.data.transactions.TransactionWithDetails;
@@ -35,23 +33,23 @@ public class TransactionRepository {
 
     // Function to insert a transaction
     public void insert(TransactionModel transaction, Consumer<Boolean> callback) {
-        Handler mainHandler = new Handler(Looper.getMainLooper());
-        executor.execute(() -> {
+        Handler mainHandler = new Handler(Looper.getMainLooper()); // Handler to run on the main thread
+        executor.execute(() -> { // Execute the task in a new thread
             try {
-                transactionDao.insert(transaction);
-                mainHandler.post(() -> {
-                    callback.accept(true);
+                transactionDao.insert(transaction); // Insert the transaction
+                mainHandler.post(() -> { // Run on the main thread
+                    callback.accept(true); // Return true to the callback function
                 });
-            } catch (Exception e) {
-                mainHandler.post(() -> {
-                    callback.accept(false);
+            } catch (Exception e) { // Catch any exception
+                mainHandler.post(() -> { // Run on the main thread
+                    callback.accept(false); // Return false to the callback function
                 });
                 e.printStackTrace();
             }
         });
     }
 
-    // Function to update a transaction
+    // Function to update a transaction, uses the same logic as insert
     public void update(TransactionModel transaction, Consumer<Boolean> callback) {
         Handler mainHandler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
@@ -69,7 +67,7 @@ public class TransactionRepository {
         });
     }
 
-    // Function to delete a transaction
+    // Function to delete a transaction, uses the same logic as insert
     public void delete(TransactionModel transaction, Consumer<Boolean> callback) {
         Handler mainHandler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
@@ -90,14 +88,14 @@ public class TransactionRepository {
     // Function to get all transactions
     public LiveData<List<TransactionWithDetails>> getAllTransactions() {
         try {
-            return transactionDao.getAllTransactions();
-        } catch (Exception e) {
+            return transactionDao.getAllTransactions(); // Return all transactions
+        } catch (Exception e) { // Catch any exception
             e.printStackTrace();
-            return null;
+            return null; // Return null
         }
     }
 
-    // Function to get all incomes
+    // Function to get all incomes, uses the same logic as getAllTransactions
     public LiveData<List<TransactionWithDetails>> getAllIncomes() {
         try {
             return transactionDao.getAllIncomes();
@@ -107,7 +105,7 @@ public class TransactionRepository {
         }
     }
 
-    // Function to get all expenses
+    // Function to get all expenses, uses the same logic as getAllTransactions
     public LiveData<List<TransactionWithDetails>> getAllExpenses() {
         try {
             return transactionDao.getAllExpenses();
@@ -118,8 +116,8 @@ public class TransactionRepository {
     }
 
 
-    // Function to get the current month summary by type
-    public LiveData<List<DataChartLabelValue>> getCurrentMonthSummaryByType(String type) {
+    // Function to get the current month summary by type, uses the same logic as getAllTransactions
+    public LiveData<List<DataChartLabelValueModel>> getCurrentMonthSummaryByType(String type) {
         try {
             return transactionDao.getCurrentMonthSummaryByType(type);
         } catch (Exception e) {

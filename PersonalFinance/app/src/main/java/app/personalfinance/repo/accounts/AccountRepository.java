@@ -3,16 +3,11 @@ package app.personalfinance.repo.accounts;
 import android.app.Application;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
-
 import app.personalfinance.data.PersonalFinanceDatabase;
 import app.personalfinance.data.accounts.AccountDao;
 import app.personalfinance.data.accounts.AccountModel;
@@ -37,13 +32,40 @@ public class AccountRepository {
 
     // Function to insert an account
     public void insert(AccountModel account, Consumer<Boolean> callback) {
+        Handler mainHandler = new Handler(Looper.getMainLooper()); // Handler to run on the main thread
+        executor.execute(() -> { // Execute the task in a new thread
+            try {
+                accountDao.insert(account); // Insert the account
+                mainHandler.post(() -> { // Run on the main thread
+                    callback.accept(true); // Return true to the callback function
+                });
+            } catch (Exception e) { // Catch any exception
+                mainHandler.post(() -> { // Run on the main thread
+                    callback.accept(false); // Return false to the callback function
+                });
+                e.printStackTrace();
+            }
+        });
+    }
+
+    // Function to update an account, uses the same logic as insert
+    public void update(AccountModel account, Consumer<Boolean> callback) {
         Handler mainHandler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
             try {
-                accountDao.insert(account);
-                mainHandler.post(() -> {
-                    callback.accept(true);
-                });
+                AccountModel accountOriginal = accountDao.getAccount(account.getId());
+                if (accountOriginal != null) {
+                    double difference = account.getBalance() - accountOriginal.getBalance();
+                    account.setCurrentBalance(accountOriginal.getCurrentBalance() + difference);
+                    accountDao.update(account);
+                    mainHandler.post(() -> {
+                        callback.accept(true);
+                    });
+                } else {
+                    mainHandler.post(() -> {
+                        callback.accept(false);
+                    });
+                }
             } catch (Exception e) {
                 mainHandler.post(() -> {
                     callback.accept(false);
@@ -53,7 +75,7 @@ public class AccountRepository {
         });
     }
 
-    // Function to update an account
+    // Function to update an account, uses the same logic as insert
     public void updateAccountBalance(int accountID, double amount, Consumer<Boolean> callback) {
         Handler mainHandler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
@@ -71,7 +93,7 @@ public class AccountRepository {
         });
     }
 
-    // Function to delete an account
+    // Function to delete an account, uses the same logic as insert
     public void delete(AccountModel account, Consumer<Boolean> callback) {
         Handler mainHandler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
@@ -92,14 +114,24 @@ public class AccountRepository {
     // Function to get the last inserted account
     public AccountModel getLast() {
         try {
-            return accountDao.getLast();
+            return accountDao.getLast(); // Get the last account
+        } catch (Exception e) { // Catch any exception
+            e.printStackTrace();
+            return null; // Return null
+        }
+    }
+
+    // Function to get an account, uses the same logic as AccountModel
+    public AccountModel getAccount(int id) {
+        try {
+            return accountDao.getAccount(id);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    // Function to get all accounts
+    // Function to get all accounts, uses the same logic as AccountModel
     public LiveData<List<AccountModel>> getAllAccounts() {
         try {
             return accountDao.getAllAccounts();

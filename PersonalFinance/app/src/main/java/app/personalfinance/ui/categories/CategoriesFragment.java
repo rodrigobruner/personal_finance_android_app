@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import app.personalfinance.R;
 import app.personalfinance.data.categories.CategoryModel;
 import app.personalfinance.databinding.FragmentCategoriesBinding;
@@ -38,13 +37,16 @@ public class CategoriesFragment extends Fragment {
     // ViewModel
     private CategoriesViewModel categoriesViewModel;
 
+    // ImageView for when you have no data
     ImageView noDataImage;
 
     // Executor and Handler
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Handler mainHandler = new Handler(Looper.getMainLooper());
 
+    // RecyclerView
     private RecyclerView recyclerView;
+    // Adapter
     private CategoryAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -54,19 +56,21 @@ public class CategoriesFragment extends Fragment {
         binding = FragmentCategoriesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // get widget
         noDataImage = binding.imageViewCategoriesNoData;
-
+        // Onclick of the add button redirect to the form
         Button addButton = binding.buttonAddCategory;
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Redirect to the form
                 NavController navController = Navigation.findNavController(v);
                 navController.navigate(R.id.action_categoriesFragment_to_formCategoriesFragment);
             }
         });
-
+        // Get the RecyclerView
         recyclerView = binding.recyclerViewCategories;
-        bindRecyclerView();
+        bindRecyclerView(); // Bind the RecyclerView
 
         return root;
     }
@@ -78,15 +82,18 @@ public class CategoriesFragment extends Fragment {
 
             // Observe the LiveData
             mainHandler.post(() -> liveData.observe(getViewLifecycleOwner(), categoryList -> {
-                if (categoryList == null || categoryList.isEmpty()) {
-                    noDataImage.setVisibility(View.VISIBLE);
+                if (categoryList == null || categoryList.isEmpty()) { // If the list is empty
+                    noDataImage.setVisibility(View.VISIBLE); // Show the no data image
                 } else {
-                    noDataImage.setVisibility(View.GONE);
+                    noDataImage.setVisibility(View.GONE); // Hide the no data image
+                    // Set the layout manager
                     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    // Create adapter
                     adapter = new CategoryAdapter(getContext(), (ArrayList<CategoryModel>) categoryList, categoriesViewModel);
-                    recyclerView.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
+                    recyclerView.setAdapter(adapter); // Set the adapter
+                    adapter.notifyDataSetChanged(); // Notify the adapter
 
+                    // Swipe to delete
                     ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCategoryCallback(adapter));
                     itemTouchHelper.attachToRecyclerView(recyclerView);
                 }

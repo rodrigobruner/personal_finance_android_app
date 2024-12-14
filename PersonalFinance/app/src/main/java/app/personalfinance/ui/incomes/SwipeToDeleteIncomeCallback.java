@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+// Class to handle swipe to delete income
 public class SwipeToDeleteIncomeCallback extends ItemTouchHelper.SimpleCallback {
 
     private IncomeAdapter mAdapter;

@@ -3,13 +3,12 @@ package app.personalfinance.data.transactions;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
-
-import java.util.Date;
-
 import app.personalfinance.data.accounts.AccountModel;
 import app.personalfinance.data.categories.CategoryModel;
 
 //https://medium.com/@jaclync/android-room-with-nested-relationships-803dad19a500
+//https://developer.android.com/training/data-storage/room/relationships
+// table name and foreign keys
 @Entity(tableName = "transactions",
         foreignKeys = {
                 @ForeignKey(entity = AccountModel.class,
@@ -20,18 +19,23 @@ import app.personalfinance.data.categories.CategoryModel;
                         parentColumns = "id",
                         childColumns = "categoryId",
                         onDelete = ForeignKey.RESTRICT)
-        }) //Table name
+        })
 public class TransactionModel {
 
     //PK id
     @PrimaryKey(autoGenerate = true)
     private int id;
-
+    //FK account id
     private int accountId;
+    //FK category id
     private int categoryId;
+    //amount of the transaction
     private double amount;
+    //description of the transaction
     private String description;
+    //date of the transaction
     private String date;
+    //type of the transaction
     private String type;
 
     //Constructor
@@ -44,9 +48,7 @@ public class TransactionModel {
         this.type = type;
     }
 
-
     //Getters and Setters
-
     public int getId() {
         return id;
     }

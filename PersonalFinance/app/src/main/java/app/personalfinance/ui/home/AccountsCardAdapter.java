@@ -13,7 +13,9 @@ import app.personalfinance.data.accounts.AccountModel;
 import app.personalfinance.helpper.CurrencyFormatter;
 
 public class AccountsCardAdapter extends RecyclerView.Adapter<AccountsCardAdapter.ViewHolder> {
+    // List of accounts
     private List<AccountModel> accounts;
+    // Context
     private Context context;
 
     public AccountsCardAdapter(Context context, List<AccountModel> accounts) {
@@ -22,10 +24,12 @@ public class AccountsCardAdapter extends RecyclerView.Adapter<AccountsCardAdapte
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        // define account name and balance
         TextView accountName, accountBalance;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
+            // set widgets
             accountName = itemView.findViewById(R.id.accountCardName);
             accountBalance = itemView.findViewById(R.id.accountCardBalance);
         }
@@ -40,7 +44,9 @@ public class AccountsCardAdapter extends RecyclerView.Adapter<AccountsCardAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        // Get the account
         AccountModel account = accounts.get(position);
+        // Set the account name and balance
         holder.accountName.setText(account.getName());
         holder.accountBalance.setText(CurrencyFormatter.format(account.getCurrentBalance()));
     }

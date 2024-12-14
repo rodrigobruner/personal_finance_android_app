@@ -2,11 +2,11 @@ package app.personalfinance.data.transactions;
 
 import androidx.room.Embedded;
 import androidx.room.Relation;
-import java.util.List;
-
 import app.personalfinance.data.accounts.AccountModel;
 import app.personalfinance.data.categories.CategoryModel;
 
+// https://medium.com/@jaclync/android-room-with-nested-relationships-803dad19a500
+// TransactionWithDetails class, contains the transaction and accounts and categories releted to the transaction
 public class TransactionWithDetails {
     @Embedded
     public TransactionModel transaction;

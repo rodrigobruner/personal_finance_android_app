@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+// FormPagerAdapter is a FragmentStateAdpter that returns a new instance of FormTransactionsFragment
 public class FormPagerAdapter extends FragmentStateAdapter {
     public static final String[] TAB_TITLES = new String[]{"Income", "Expense", "Transfer"};
 

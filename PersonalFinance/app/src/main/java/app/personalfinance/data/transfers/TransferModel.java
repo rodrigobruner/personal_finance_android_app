@@ -3,10 +3,7 @@ package app.personalfinance.data.transfers;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
-
 import app.personalfinance.data.accounts.AccountModel;
-import app.personalfinance.data.categories.CategoryModel;
-
 
 //https://medium.com/@jaclync/android-room-with-nested-relationships-803dad19a500
 @Entity(tableName = "transfers",
@@ -24,11 +21,15 @@ public class TransferModel {
     //PK id
     @PrimaryKey(autoGenerate = true)
     private int id;
-
+    //FK from account id
     private int fromAccount;
+    //FK to account id
     private int toAccount;
+    //amount of the transfer
     private double amount;
+    //date of the transfer
     private String date;
+    //note of the transfer
     private String note;
 
     //Constructor

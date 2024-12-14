@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+// SwipeToDeleteTransferCallback is a SimpleCallback that allows the user to swipe left or right to delete a transfer
 public class SwipeToDeleteTransferCallback extends ItemTouchHelper.SimpleCallback {
 
     private TransferAdapter mAdapter;

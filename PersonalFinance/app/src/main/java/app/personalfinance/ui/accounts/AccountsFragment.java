@@ -3,13 +3,11 @@ package app.personalfinance.ui.accounts;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -19,12 +17,10 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import app.personalfinance.R;
 import app.personalfinance.data.accounts.AccountModel;
 import app.personalfinance.databinding.FragmentAccountsBinding;
@@ -53,19 +49,19 @@ public class AccountsFragment extends Fragment {
         binding = FragmentAccountsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-
         noDataImage = binding.imageViewAccountsNoData;
 
         // get the button to add an account
         Button addButton = binding.buttonAddAccount;
 
-        //Onclick
+
+        // Onclick
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NavController navController = Navigation.findNavController(v);
                 navController.navigate(R.id.action_accountsFragment_to_formAccountsFragment);
-                //Move to the formAccountsFragment
+                // Move to the formAccountsFragment
             }
         });
 
@@ -75,8 +71,6 @@ public class AccountsFragment extends Fragment {
 
         // Bind the RecyclerView
         bindRecyclerView();
-
-
 
         return root;
     }
@@ -97,6 +91,18 @@ public class AccountsFragment extends Fragment {
                     AccountAdapter adapter = new AccountAdapter(getContext(), (ArrayList<AccountModel>) accountList, accountsViewModel);
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
+                    // Set item click listener
+                    //TODO: create the update account
+//                    adapter.setOnItemClickListener(new AccountAdapter.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(int position) {
+//                            AccountModel account = accountList.get(position);
+//                            Bundle bundle = new Bundle();
+//                            bundle.putSerializable("accountModel", account);
+//                            NavController navController = Navigation.findNavController(getView());
+//                            navController.navigate(R.id.action_accountsFragment_to_formAccountsFragment, bundle);
+//                        }
+//                    });
                     // Swipe to delete
                     ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteAccountCallback(adapter));
                     itemTouchHelper.attachToRecyclerView(recyclerView);

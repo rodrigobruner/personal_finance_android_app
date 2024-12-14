@@ -7,7 +7,7 @@ import app.personalfinance.R;
 // SettingsOptionList class, contains the settings options
 public class SettingsOptionList {
 
-    // Get settings options to generate the settings listView
+    // Get settings options to generate the setings listView
     public static ArrayList<SettingsOption> getSettingsOptions(Context context) {
         ArrayList<SettingsOption> settingsOptions = new ArrayList<>();
         // Add accounts option

@@ -13,14 +13,14 @@ import java.util.List;
 @Dao
 public interface TransferDao {
     @Insert
-    void insert(TransferModel transfer);
+    void insert(TransferModel transfer); // Insert a new transfer
 
     @Update
-    void update(TransferModel transfer);
+    void update(TransferModel transfer); // Update a transfer
 
     @Delete
-    void delete(TransferModel transfer);
+    void delete(TransferModel transfer); // Delete a transfer
 
     @Query("SELECT * FROM transfers ORDER BY id DESC")
-    LiveData<List<TransferWithDetails>> getAllTransfers();
+    LiveData<List<TransferWithDetails>> getAllTransfers(); // Get all transfers
 }

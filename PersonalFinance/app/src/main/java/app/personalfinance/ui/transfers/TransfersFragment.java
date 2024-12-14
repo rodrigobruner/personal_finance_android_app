@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -19,17 +18,14 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import app.personalfinance.R;
 import app.personalfinance.data.transfers.TransferWithDetails;
 import app.personalfinance.databinding.FragmentTransfersBinding;
 import app.personalfinance.viewModel.transfers.TransfersViewModel;
-import app.personalfinance.viewModel.transactions.TransactionsViewModel;
 
 // Fragment for the transfers list
 public class TransfersFragment extends Fragment {
@@ -37,7 +33,7 @@ public class TransfersFragment extends Fragment {
     private FragmentTransfersBinding binding;
     // ViewModel
     private TransfersViewModel transfersViewModel;
-
+    // ImageView for when there is no data
     ImageView noDataImage;
 
     // RecyclerView
